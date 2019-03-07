@@ -1,18 +1,65 @@
 import React from 'react';
+import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { StyleSheet, Text, View, Image, TextInput, Button, Alert,
 TouchableHighlight, TouchableOpacity, TouchableNativeFeedback,
-TouchableWithoutFeedback, ScrollView } from 'react-native';
+TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
 
 import {createStackNavigator, createAppContainer, createBottomTabNavigator} from 'react-navigation';
+import { List, ListItem, SearchBar } from "react-native-elements";
 
 //The opening screen for the app
 class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      data: '',
+      error: null,
+      refreshing: false
+    };
+  }
+
+  componentDidMount() {
+    this.asyncData();
+  }
+
+   async  asyncData() {
+  // fetch data from a url endpoint
+  let response = await axios.get("http://104.248.235.9:3001/api");
+   //console.log(response);
+  let list = response.data;
+   //console.log(list);
+
+   return this.setState(
+     { loading: false, data: list }
+   );
+  }
+
+  renderTopStories = (item) => {
+    return (
+        <View style={{
+        borderWidth: 8,
+        borderRadius: 5,
+        margin: 3,
+        borderColor: '#092662'
+    }}>
+        <ListItem
+      title={item.headline}
+      //subtitle={'Category: ' + item.body}
+      //onPress={() => this.onPress("google.com")} // goto url?
+    />
+    </View>
+    );
+  }
 
   render() {
     return (
       <ScrollView style={{backgroundColor: '#D3D3D3'}}>
-      <Text style={{textAlign: 'center'}}>Top Stories</Text>
+        <FlatList
+            data={this.state.data}
+            renderItem={({ item }) => this.renderTopStories(item)}/>
+        <Text style={{textAlign: 'center'}}>Top Stories</Text>
         <View style ={{
             borderWidth: 5,
             borderRadius: 20,
@@ -189,7 +236,7 @@ export default createAppContainer(createBottomTabNavigator(
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
         let IconComponent = Ionicons;
         let iconName;
