@@ -56,28 +56,26 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <ScrollView style={{backgroundColor: '#D3D3D3'}}>
+        <Text style={{textAlign: 'center'}}>Top Stories</Text>
         <FlatList
             data={this.state.data}
-            renderItem={({ item }) => this.renderTopStories(item)}/>
-        <Text style={{textAlign: 'center'}}>Top Stories</Text>
-        <View style ={{
-            borderWidth: 5,
-            borderRadius: 20,
-            margin: 5,
-            borderColor: '#092662'
-        }}>
+            renderItem={({ item }) => this.renderTopStories(item)}
+            keyExtractor={(item, index) => (item.id).toString()}/>
+        <View style ={styles.headlineBox}>
             <Button onPress={() => this.props.navigation.navigate('Story')}
-            title="Headline1 - Headline1 - Headline1"
-            color="#092662" />
+                title="Headline1 - Headline1 - Headline1"
+                color={styles.headlineBox.borderColor} />
+
             <View style = {{
-                flex:1,
-                flexDirection: 'row',
-                margin: 10,
-                alignItems: 'center'
-            }}>
-                <Image source={{uri: "https://bloximages.chicago2.vip.townnews.com/kansan.com/content/tncms/assets/v3/editorial/5/54/55450714-3241-11e9-8ca1-8bc32dfb7918/5c689a8b9c949.image.jpg?resize=750%2C968", width: 86, height: 111}} />
-                <Text style = {{fontSize: 12, margin: 4}}>{"Blah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\n"}</Text>
+                    flex:1,
+                    flexDirection: 'row',
+                    margin: 10,
+                    alignItems: 'center'
+                }}>
+                    <Image source={{uri: "https://bloximages.chicago2.vip.townnews.com/kansan.com/content/tncms/assets/v3/editorial/5/54/55450714-3241-11e9-8ca1-8bc32dfb7918/5c689a8b9c949.image.jpg?resize=750%2C968", width: 86, height: 111}} />
+                    <Text style = {{fontSize: 12, margin: 4}}>{"Blah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\n"}</Text>
             </View>
+
         </View>
         <View style ={{
             borderWidth: 5,
@@ -117,12 +115,7 @@ class HomeScreen extends React.Component {
                 <Text style = {{fontSize: 12, margin: 4}}>{"Blah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\nBlah blah blah blah blah blah blah\n"}</Text>
             </View>
         </View>
-        <View style ={{
-            borderWidth: 5,
-            borderRadius: 20,
-            margin: 5,
-            borderColor: '#092662'
-        }}>
+        <View style ={styles.headlineBox}>
             <Button onPress={() => this.props.navigation.navigate('Story')}
             title="Headline4 - Headline4 - Headline4"
             color="#092662" />
