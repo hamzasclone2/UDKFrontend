@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { StyleSheet, Text, View, Image, TextInput, Button, Alert,
-TouchableHighlight, TouchableOpacity, TouchableNativeFeedback,
-TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, Image, View, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 
 import StoryScreen from './story';
+import TabNav from './tabnav';
 
 import {createStackNavigator, createAppContainer, createBottomTabNavigator} from 'react-navigation';
 import { List, ListItem, SearchBar } from "react-native-elements";
@@ -14,29 +13,60 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
+        this.tabTouchHandler = this.tabTouchHandler.bind(this)
         this.state = {
-            loading: false,
+            loading: true,
             data: '',
             error: null,
-            refreshing: false
+            refreshing: false,
+            currentTab: 'top',
         };
     }
 
     componentDidMount() {
-        // move this into loading screen
-        this.asyncData()
+        this.initData();
     }
 
-    async asyncData() {
-        let response = await axios.get("http://104.248.235.9:3001/api/top");
-        list = response.data
-        return this.setState(
-            { loading: false, data: list }
+    async initData() {
+        list = await this.asyncData('top');
+        this.setState(
+            { 
+                loading: false,
+                data: list,
+                currentTab: 'top',
+            }
         );
     }
 
+    async asyncData(call) {
+        let response;
+        if(call == 'top') {
+            response = await axios.get("http://104.248.235.9:3001/api/top");
+        } else if(call == 'sports') {
+            response = await axios.get("http://104.248.235.9:3001/api/sports");
+        } else if(call == 'arts') {
+            response = await axios.get("http://104.248.235.9:3001/api/opinion");
+        }
+        list = response.data
+        return list;
+        /*
+        this.setState(
+            { 
+                loading: false,
+                data: list,
+                currentTab: call,
+            }
+        );
+        */
+    }
+
+    tabTouchHandler(tab) {
+        if(tab != this.state.currentTab) {
+            this.asyncData(tab);
+        }
+    }
+
     renderCard = (item) => {
-        console.log(item)
         return (
             <TouchableOpacity style={styles.Card}
                 onPress={() => this.props.navigation.navigate('Story', item)}>    
@@ -47,21 +77,24 @@ class HomeScreen extends React.Component {
 
     render() {
         return (
-            <ScrollView>
-                <Text style={{textAlign: 'center'}}>Top Stories</Text>
-                <FlatList
-                    data={this.state.data}
-                    renderItem={({ item }) => this.renderCard(item)}
-                    keyExtractor={(item, index) => (item.id).toString()}
-                />        
-            </ScrollView>
+            <View style={{flex: 1}}>
+                <View style={{flex: 1.5}}>
+                    <FlatList
+                        data={this.state.data}
+                        renderItem={({ item }) => this.renderCard(item)}
+                        keyExtractor={(item, index) => (item.id).toString()}
+                    />    
+                </View>  
+                <View style={styles.Tabs}>
+                    <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
+                </View>  
+            </View>
         );
     }
 }
 
 
 
-//Allows us to use the UDK logo
 class LogoTitle extends React.Component {
     render() {
         return (
@@ -91,45 +124,7 @@ const AppNavigator = createStackNavigator(
     }
 );
 
-// tabs should only be on home screen, and should probably be a component, we are only changing the data on the home screen, not changing which screen we are on
-//Allows us to have a tabs on the bottom
-export default createAppContainer(createBottomTabNavigator(
-    {
-        //Home: HomeScreen,
-        //Story: StoryScreen
-        Home: {screen: AppNavigator},
-        News: {screen: StoryScreen},
-        Sports: {screen: StoryScreen},
-        Arts: {screen: StoryScreen},
-        Opinion: {screen: StoryScreen}
-    },
-    {
-        defaultNavigationOptions: ({ navigation }) => ({
-        tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state;
-        let IconComponent = Ionicons;
-        let iconName;
-        if (routeName === 'Home') {
-          iconName = `ios-home`;
-        } else if (routeName === 'News') {
-          iconName = `ios-paper`;
-        } else if (routeName === 'Sports') {
-          iconName = `ios-trophy`;
-        } else if (routeName === 'Arts') {
-          iconName = `ios-color-palette`;
-        } else if (routeName === 'Opinion') {
-          iconName = `ios-chatbubbles`;
-        }
-
-        return <IconComponent name={iconName} size={25} color={tintColor} />;
-      },
-    }),
-    tabBarOptions: {
-      activeTintColor: 'blue',
-      inactiveTintColor: 'gray',
-    },
-    }
-));
+export default createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
     Card: {
@@ -137,4 +132,9 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc',
         backgroundColor: '#cccccc',
     },
+    Tabs: {
+        flex: 0.1,
+        borderWidth: 1,
+        borderColor: '#cccccc',
+    }
 });

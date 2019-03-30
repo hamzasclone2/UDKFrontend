@@ -7,7 +7,7 @@ export default class StoryScreen extends React.Component {
         super(props)
         const {state} = props.navigation;
         this.data = state.params
-        this.trimDate = (date) => date.substring(0, date.indexOf('T'));
+        this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
     }
 
     render(){
@@ -15,7 +15,7 @@ export default class StoryScreen extends React.Component {
             <ScrollView style={{backgroundColor: '#cccccc'}}>
                 <View style={styles.BodyWrapper}>
                     <Text style={styles.Headline}>{this.data.headline}</Text>
-                    <Text style={styles.Byline}>{this.data.author} | {this.trimDate(this.data.date)}</Text>
+                    <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
                     <Image source={{uri: "https://bloximages.chicago2.vip.townnews.com/kansan.com/content/tncms/assets/v3/editorial/5/54/55450714-3241-11e9-8ca1-8bc32dfb7918/5c689a8b9c949.image.jpg?resize=750%2C968", width: 230, height: 296}} />
                     <Text style={styles.ImageCaption}>Redshirt sophomore guard K.J. Lawson celebrates after hitting a three against West Virginia. The Jayhawks defeated the Mountaineers 78-53 on Saturday, Feb. 16.</Text>
                     <Text style={styles.ImageCaption}>Chance Parker/KANSAN</Text>
