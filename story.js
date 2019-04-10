@@ -14,7 +14,7 @@ export default class StoryScreen extends React.Component {
     render(){
         if(this.data.main_image == null) {
             return (
-                <ScrollView style={{backgroundColor: '#cccccc'}}>
+                <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.BodyWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
@@ -24,11 +24,11 @@ export default class StoryScreen extends React.Component {
             );
         } else {
             return (
-                <ScrollView style={{backgroundColor: '#cccccc'}}>
+                <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.BodyWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
-                        <Image source={{uri: this.data.main_image, width: 230, height: 296}} />
+                        <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
                         <ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
         fontSize: 10,
     },
     MainImage: {
-        resizeMode: 'stretch',
+        width: 400,
+        height: 300,
     },
     ImageCaption: {
         fontSize: 10,
