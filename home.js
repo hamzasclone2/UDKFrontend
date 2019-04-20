@@ -2,10 +2,10 @@ import React from 'react';
 import _ from 'lodash';
 import { getData, contains } from './api';
 import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
-
+import Search from 'react-native-search-box';
 import TabNav from './tabnav';
 
-import { ListItem, SearchBar } from "react-native-elements";
+import { ListItem } from "react-native-elements";
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
@@ -31,13 +31,13 @@ export default class HomeScreen extends React.Component {
         this.loadData();
     }
 
-    loadData(category = "top", searchText = "") { // default values
+    loadData(category = "top", searchText = "") { 
         getData(category, searchText)
         .then((data) => { 
             this.setState({
                 loading: false,
                 numDisplayed: 40,
-                displayedData: data.slice(1,40),
+                displayedData: data.slice(0,40),
                 serverData: data,
             })
         })
@@ -57,7 +57,7 @@ export default class HomeScreen extends React.Component {
                 this.setState({
                     loading: false,
                     numDisplayed: 40,
-                    displayedData: data.slice(1,40),
+                    displayedData: data.slice(0,40),
                     serverData: data,
                     currentTab: tab,
                 })
@@ -65,15 +65,26 @@ export default class HomeScreen extends React.Component {
         }
     }
 
-    searchHandler = (searchText) => {
+    searchLocalyHandler = (searchText = "") => {
         const newData = _.filter(this.state.serverData, article => {
-            return contains(article, searchText, newData)
+            return contains(article, searchText)
+        } );
+           
+        this.setState({
+            displayedData: newData,
+            search: searchText
+        });
+    }
+
+    searchOnServerHandler = (searchText = "") => {
+        const newData = _.filter(this.state.serverData, article => {
+            return contains(article, searchText)
         } );
 
         this.setState({
-            displayedData: newData,
-            search: searchText, newData
-        });// () => this.loadData('search', searchText)); // to get latest query list/state
+            serverData: newData,
+            search: searchText,
+         } , () => this.loadData("search", searchText)); // to get latest query list/state
     }
 
     renderCard = (item) => {
@@ -115,16 +126,16 @@ export default class HomeScreen extends React.Component {
             return (
                 <View style={{flex: 1}}>
                     <View style={{flex: 1.5}}>
-                        <SearchBar
-                            placeholder="Type Here..."
-                            lightTheme
-                            onChangeText={text => this.searchHandler(text)}
-                            onClear={text => this.searchHandler('')}
-                            value={this.state.search}
+                        <Search
+                            ref="search_box"
+                            onSearch={text => this.searchOnServerHandler(text)}
+                            onCancel={text => this.searchOnServerHandler(text)}
+                            onDelete={text => this.searchLocalyHandler(text)}
+                            onChangeText={text => this.searchLocalyHandler(text)}
                         />
                         <FlatList
                             data={this.state.displayedData}
-                            renderItem={({ item }) => this.renderCard(item)}
+                            renderItem={({item}) => this.renderCard(item)}
                             keyExtractor={(item, index) => (item.id).toString()}
                         />    
                     </View>  
