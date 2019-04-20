@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     },
     Byline: {
         fontSize: 10,
+		fontWeight: "bold"
     },
     MainImage: {
         width: 400,

@@ -10,12 +10,20 @@ export default class ArticleBody extends React.Component {
 
     render() {
         return (
-            <Text>{this.props.bodyAsText}</Text>
+            <Text>{this.bodyList}</Text>
+			
         );
     }
 
-    parse(bodyText) {
-        return [];
+    parse(bodyasText) {
+		var mystring = this.props.bodyAsText;
+		var x;
+		for(x = 0; x < mystring.length; x++)
+		{
+			mystring = mystring.replace("$$$PARAGRAPH$$$", "\n\n");
+		}
+		return <Text> {mystring}</Text>
+        // return [];
     }
 
 }

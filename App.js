@@ -11,7 +11,7 @@ class LogoTitle extends React.Component {
         return (
             <Image
                 source={require('./assets/udk.jpg')}
-                style={{width: 40, height: 40}}
+                style={{width: 125, height: 40}}
             />
         );
     }

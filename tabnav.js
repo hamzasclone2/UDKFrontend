@@ -14,7 +14,7 @@ export default class TabNav extends React.Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.Tab} onPress={() => this.props.tabTouchCallback('top')}>
-                    <Text style={{color: '#ffffff'}}>Top</Text>
+                    <Text style={{color: '#ffffff'}}>Home</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.Tab} onPress={() => this.props.tabTouchCallback('arts')}>
