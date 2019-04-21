@@ -9,16 +9,34 @@ export default class StoryScreen extends React.Component {
         const {state} = props.navigation;
         this.data = state.params
         this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
+        this.state = {
+            story: state.params,
+            parsedBody: [],
+        }
+    }
+
+    componentDidMount() {
+        this.setState({
+            parsedBody: this.parse(this.data.body),
+        });
+    }
+    parse(text) {
+        let s = text.split("$$$PARAGRAPH$$$");
+        console.log(s);
+        return s;
     }
 
     render(){
+        const listItems = this.state.parsedBody.map((bodyElem) =>
+            <Text>{'\t\t'}{bodyElem}</Text>
+        );
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.BodyWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
-                        <Text style={styles.Body}>{this.data.body}</Text>
+                        {listItems}
                     </View>
                 </ScrollView>
             );
@@ -30,7 +48,7 @@ export default class StoryScreen extends React.Component {
                         <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
-                        <ArticleBody bodyAsText={this.data.body}></ArticleBody>
+                        {listItems}
                     </View>
                 </ScrollView>
             );
