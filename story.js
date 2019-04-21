@@ -8,7 +8,10 @@ export default class StoryScreen extends React.Component {
         super(props)
         const {state} = props.navigation;
         this.data = state.params
-        this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
+        if(this.data.date.includes("T")){
+            this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
+        }
+        
         this.state = {
             story: state.params,
             parsedBody: [],
@@ -17,38 +20,39 @@ export default class StoryScreen extends React.Component {
 
     componentDidMount() {
         this.setState({
-            parsedBody: this.parse(this.data.body),
+            paragraphs: this.parse(this.data.body),
         });
     }
     parse(text) {
         let s = text.split("$$$PARAGRAPH$$$");
         console.log(s);
         return s;
+
     }
 
     render(){
-        const listItems = this.state.parsedBody.map((bodyElem) =>
-            <Text>{'\t\t'}{bodyElem}</Text>
+        const paragraphsJSX = this.state.paragraphs.map((paragraph) =>
+            <Text>{'\t\t'}{paragraph}</Text>
         );
+
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.BodyWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
-                        {listItems}
+                        {paragraphsJSX}
                     </View>
                 </ScrollView>
             );
+
         } else {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.BodyWrapper}>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
-                        {listItems}
+                        {paragraphsJSX}
                     </View>
                 </ScrollView>
             );
@@ -64,12 +68,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin:5,
+        top:-5,
     },
     Headline: {
-        fontSize: 18,
+        fontSize: 30,
+		fontWeight: "bold"
     },
     Byline: {
+		// // textAlign: 'right'
         fontSize: 10,
+		fontWeight: "bold"
     },
     MainImage: {
         width: 400,
