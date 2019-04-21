@@ -18,27 +18,26 @@ export default class StoryScreen extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.setState({
             paragraphs: this.parse(this.data.body),
         });
     }
     parse(text) {
         let s = text.split("$$$PARAGRAPH$$$");
-        console.log(s);
         return s;
 
     }
 
     render(){
-        const paragraphsJSX = this.state.paragraphs.map((paragraph) =>
-            <Text>{'\t\t'}{paragraph}</Text>
+        const paragraphsJSX = this.state.paragraphs.map((paragraph, i) =>
+            <Text key={i} style={styles.Body}>{'\t\t'}{paragraph}{'\n'}</Text>
         );
 
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
-                    <View style={styles.BodyWrapper}>
+                    <View style={styles.ArticleWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
                         {paragraphsJSX}
@@ -49,7 +48,8 @@ export default class StoryScreen extends React.Component {
         } else {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
-                    <View style={styles.BodyWrapper}>
+                    <View style={styles.ArticleWrapper}>
+                        <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
                         {paragraphsJSX}
@@ -64,7 +64,7 @@ export default class StoryScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    BodyWrapper: {
+    ArticleWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
         margin:5,
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
         color: '#777777',
     },
     Body: {
-        fontSize: 12,
+        color: '#000000',
+        fontSize: 16,
     },
 });
