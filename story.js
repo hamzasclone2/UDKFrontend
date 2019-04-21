@@ -17,7 +17,7 @@ export default class StoryScreen extends React.Component {
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.BodyWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
+                        <Text style={styles.Byline}>{this.data.author} {this.data.date}</Text>
                         <Text style={styles.Body}>{this.data.body}</Text>
                     </View>
                 </ScrollView>
@@ -26,10 +26,11 @@ export default class StoryScreen extends React.Component {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.BodyWrapper}>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
+                        <Text style={styles.Headline}>{this.data.headline}</Text>
+                        <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> {this.data.date}</Text>
+						
                         <ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
                 </ScrollView>
@@ -48,9 +49,11 @@ const styles = StyleSheet.create({
         margin:5,
     },
     Headline: {
-        fontSize: 18,
+        fontSize: 30,
+		fontWeight: "bold"
     },
     Byline: {
+		// // textAlign: 'right'
         fontSize: 10,
 		fontWeight: "bold"
     },

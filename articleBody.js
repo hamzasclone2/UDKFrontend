@@ -10,8 +10,7 @@ export default class ArticleBody extends React.Component {
 
     render() {
         return (
-            <Text>{this.bodyList}</Text>
-			
+            <Text style= {{fontSize:20}}>{this.bodyList}</Text>
         );
     }
 
