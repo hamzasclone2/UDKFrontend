@@ -32,7 +32,7 @@ export default class StoryScreen extends React.Component {
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> {this.data.date}</Text>
-						
+
                         <ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
                 </ScrollView>
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin:5,
+        top:-5,
     },
     Headline: {
         fontSize: 30,
