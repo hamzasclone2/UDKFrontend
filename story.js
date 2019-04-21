@@ -8,7 +8,9 @@ export default class StoryScreen extends React.Component {
         super(props)
         const {state} = props.navigation;
         this.data = state.params
-        this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
+        if(this.data.date.includes("T")){
+            this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
+        }
     }
 
     render(){
