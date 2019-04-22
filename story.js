@@ -36,22 +36,15 @@ export default class StoryScreen extends React.Component {
     }
 
     render(){
-// <<<<<<< HEAD
 		myStr=this.data.date;
 		myStr= DateConverter(myStr);
-// =======
-        // const paragraphsJSX = this.state.paragraphs.map((paragraph, i) =>
-            // <Text key={i} style={styles.Body}>{'\t\t'}{paragraph}{'\n'}</Text>
-        // );
-
-// >>>>>>> 7b67111e8e926cc66e31667bdde11faef46bd1ab
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
-                        {paragraphsJSX}
+                        <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> | {this.data.date}</Text>
+						<ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
                 </ScrollView>
             );
@@ -60,17 +53,13 @@ export default class StoryScreen extends React.Component {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
+                       
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
-// <<<<<<< HEAD
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> {myStr}{this.data.date}</Text>
 						
                         <ArticleBody bodyAsText={this.data.body}></ArticleBody>
-// =======
-                        // {paragraphsJSX}
-// >>>>>>> 7b67111e8e926cc66e31667bdde11faef46bd1ab
                     </View>
                 </ScrollView>
             );
