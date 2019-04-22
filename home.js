@@ -10,6 +10,7 @@ import { ListItem } from "react-native-elements";
 export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
+        this._isMounted = false;
         this.tabTouchHandler = this.tabTouchHandler.bind(this)
         this.state = {
             loading: true,
@@ -29,12 +30,18 @@ export default class HomeScreen extends React.Component {
     componentDidMount() {
         this.setState( {loading: true} );
         this.loadData();
+        this._isMounted = true;
+        this._isMounted && this.loadData();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     loadData(category = "top", searchText = "") { 
         getData(category, searchText)
         .then((data) => { 
-            this.setState({
+            this._isMounted && this.setState({
                 loading: false,
                 numDisplayed: 40,
                 displayedData: data.slice(0,40),
@@ -42,7 +49,7 @@ export default class HomeScreen extends React.Component {
             })
         })
         .catch((error) => {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
+            console.log('There has been a problem with fetch operation: ' + error.message);
         });
     }
 
@@ -68,23 +75,34 @@ export default class HomeScreen extends React.Component {
     searchLocalyHandler = (searchText = "") => {
         const newData = _.filter(this.state.serverData, article => {
             return contains(article, searchText)
-        } );
-           
+        });
+
         this.setState({
             displayedData: newData,
             search: searchText
         });
     }
 
-    searchOnServerHandler = (searchText = "") => {
-        const newData = _.filter(this.state.serverData, article => {
-            return contains(article, searchText)
-        } );
+    searchOnCancelHandler = (searchText = "") => {
+        this.loadData("top", searchText);
+    }
 
-        this.setState({
-            serverData: newData,
-            search: searchText,
-         } , () => this.loadData("search", searchText)); // to get latest query list/state
+    searchOnServerHandler = (searchText = "") => {
+        if (searchText == "") {
+            this.setState({
+                displayedData: this.state.serverData,
+                search: searchText,
+            })
+        } else {
+            const newData = _.filter(this.state.serverData, article => {
+                return contains(article, searchText)
+            });
+
+            this.setState({
+                displayedData: newData,
+                search: searchText,
+            }, () => this.loadData("search", searchText)); // to get latest query list/state
+        }
     }
 
     renderCard = (item) => {
@@ -129,8 +147,8 @@ export default class HomeScreen extends React.Component {
                         <Search
                             ref="search_box"
                             onSearch={text => this.searchOnServerHandler(text)}
-                            onCancel={text => this.searchOnServerHandler(text)}
-                            onDelete={text => this.searchLocalyHandler(text)}
+                            onCancel={() => this.searchOnCancelHandler("")}
+                            onDelete={() => this.searchOnServerHandler("")}
                             onChangeText={text => this.searchLocalyHandler(text)}
                         />
                         <FlatList

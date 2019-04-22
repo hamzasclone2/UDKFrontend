@@ -17,31 +17,60 @@ export default class StoryScreen extends React.Component {
         if(this.data.date.includes("T")){
             this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
         }
+        
+        this.state = {
+            story: state.params,
+            parsedBody: [],
+        }
+    }
+
+    componentWillMount() {
+        this.setState({
+            paragraphs: this.parse(this.data.body),
+        });
+    }
+    parse(text) {
+        let s = text.split("$$$PARAGRAPH$$$");
+        return s;
+
     }
 
     render(){
-		myStr=this.data.date;
-		myStr= DateConverter(myStr);
+// <<<<<<< HEAD
+		// myStr=this.data.date;
+		// myStr= DateConverter(myStr);
+// =======
+        // const paragraphsJSX = this.state.paragraphs.map((paragraph, i) =>
+            // <Text key={i} style={styles.Body}>{'\t\t'}{paragraph}{'\n'}</Text>
+        // );
+
+// >>>>>>> 7b67111e8e926cc66e31667bdde11faef46bd1ab
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
-                    <View style={styles.BodyWrapper}>
+                    <View style={styles.ArticleWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>{this.data.author} {this.data.date}</Text>
-                        <Text style={styles.Body}>{this.data.body}</Text>
+                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
+                        {paragraphsJSX}
                     </View>
                 </ScrollView>
             );
+
         } else {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
-                    <View style={styles.BodyWrapper}>
+                    <View style={styles.ArticleWrapper}>
+                        <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
+// <<<<<<< HEAD
                         <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> {myStr}{this.data.date}</Text>
 						
                         <ArticleBody bodyAsText={this.data.body}></ArticleBody>
+// =======
+                        // {paragraphsJSX}
+// >>>>>>> 7b67111e8e926cc66e31667bdde11faef46bd1ab
                     </View>
                 </ScrollView>
             );
@@ -53,10 +82,11 @@ export default class StoryScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    BodyWrapper: {
+    ArticleWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
         margin:5,
+        top:-5,
     },
     Headline: {
         fontSize: 30,
@@ -76,6 +106,7 @@ const styles = StyleSheet.create({
         color: '#777777',
     },
     Body: {
-        fontSize: 12,
+        color: '#000000',
+        fontSize: 16,
     },
 });
