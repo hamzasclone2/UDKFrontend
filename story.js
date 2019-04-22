@@ -3,8 +3,20 @@ import { StyleSheet, Text, View, Image, ScrollView} from 'react-native';
 function DateConverter(date)
 {
 	let oldDate = date;
-	let updatedOldDate;
-	return updatedOldDate;
+	let writtenMonth;
+	// let updatedOldDate = oldDate.split("-");
+	let [year,month,day] = oldDate.split("-");
+	let monthsNyear = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+	let months = Number(month);
+	for (i=0;i < monthsNyear.length;i++)
+	{
+		if (i==months)
+		{
+			writtenMonth = monthsNyear[i-1];
+		}
+	}
+	let updatedDate = writtenMonth+" "+day+", "+year;
+	return updatedDate;
 }
 	
 import ArticleBody from './articleBody';
@@ -36,14 +48,14 @@ export default class StoryScreen extends React.Component {
     }
 
     render(){
-		myStr=this.data.date;
-		myStr= DateConverter(myStr);
+		Dates=this.data.date;
+		Dates= DateConverter(Dates);
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> | {this.data.date}</Text>
+                        <Text style={styles.Byline}><Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author}</Text> <Text style = {{fontStyle:'italic'}}>{Dates}</Text></Text>
 						<ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
                 </ScrollView>
@@ -57,7 +69,7 @@ export default class StoryScreen extends React.Component {
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> {myStr}{this.data.date}</Text>
+                        <Text style={styles.Byline}><Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author}</Text> <Text style = {{fontStyle:'italic'}}>{Dates}</Text></Text>
 						
                         <ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
@@ -84,7 +96,7 @@ const styles = StyleSheet.create({
     Byline: {
 		// // textAlign: 'right'
         fontSize: 10,
-		fontWeight: "bold"
+		// fontWeight: "bold"
     },
     MainImage: {
         width: 400,
