@@ -37,8 +37,8 @@ export default class StoryScreen extends React.Component {
 
     render(){
 // <<<<<<< HEAD
-		// myStr=this.data.date;
-		// myStr= DateConverter(myStr);
+		myStr=this.data.date;
+		myStr= DateConverter(myStr);
 // =======
         // const paragraphsJSX = this.state.paragraphs.map((paragraph, i) =>
             // <Text key={i} style={styles.Body}>{'\t\t'}{paragraph}{'\n'}</Text>
