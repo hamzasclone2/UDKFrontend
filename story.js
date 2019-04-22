@@ -1,6 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView} from 'react-native';
-
+function DateConverter(date)
+{
+	let oldDate = date;
+	let updatedOldDate;
+	return updatedOldDate;
+}
+	
 import ArticleBody from './articleBody';
 //A page for a default story
 export default class StoryScreen extends React.Component {
@@ -14,6 +20,8 @@ export default class StoryScreen extends React.Component {
     }
 
     render(){
+		myStr=this.data.date;
+		myStr= DateConverter(myStr);
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
@@ -31,7 +39,7 @@ export default class StoryScreen extends React.Component {
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> {this.data.date}</Text>
+                        <Text style={styles.Byline}><Text style ={{color: 'red'}}>{this.data.author}</Text> {myStr}{this.data.date}</Text>
 						
                         <ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
