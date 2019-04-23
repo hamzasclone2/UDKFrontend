@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 const PORT = '3001';
-const IP = '104.248.235.9';
+const IP = '104.248.235.9'; 
 
 const getData = async function getData(category = "top", search = "") {
-
     let response;
     let articles;
     try {
@@ -25,8 +24,19 @@ const getData = async function getData(category = "top", search = "") {
         } else if (category == 'specials') {
             response = await axios.get("http://" + IP + ":" + PORT + "/api/specials");
         } else if (category == 'search') {
-            console.log("api search", search)
-            response = await axios.get("http://" + IP + ":" + PORT + "/api/search?headline=" + search);
+
+            let keywords = stringToKeywords(search);
+            let n_keywords = keywords.length;
+
+            if (n_keywords == 1) {
+                response = await axios.get("http://" + IP + ":" + PORT + "/api/search?headline=" + keywords[0]);
+            } else if (n_keywords == 2) {
+                response = await axios.get("http://" + IP + ":" + PORT + "/api/search?headline=" + keywords[0] + "&headline=" + keywords[1]);
+            } else if (n_keywords > 2) {
+                response = await axios.get("http://" + IP + ":" + PORT + "/api/search?headline=" + keywords[0] + "&headline=" + keywords[1] + "&headline=" + keywords[2]);
+            } else {
+                response = await axios.get("http://" + IP + ":" + PORT + "/api/top");
+            }
         }
         articles = response.data;
 
@@ -39,18 +49,30 @@ const getData = async function getData(category = "top", search = "") {
     return articles;
 }
 
-const contains = ({headline}, search= "") => {
+const contains = ({headline}, keywords) => {
 
+    let n_keywords = keywords.length;
     let headlineLowercase = headline.toLowerCase();
-    let searchLowercase = search.toLowerCase();    
 
-    if ( headlineLowercase.includes( searchLowercase ) ){
+    if ( n_keywords == 1 && headlineLowercase.includes( keywords[0].toLowerCase() ) ){
+        return true;
+    } else if ( n_keywords == 2 && headlineLowercase.includes( keywords[0].toLowerCase() ) 
+                                && headlineLowercase.includes( keywords[1].toLowerCase() ) ){
+        return true;
+    } else if ( n_keywords > 2  && headlineLowercase.includes( keywords[0].toLowerCase() ) 
+                                && headlineLowercase.includes( keywords[1].toLowerCase() )  
+                                && headlineLowercase.includes( keywords[2].toLowerCase() ) ){
         return true;
     }
     return false;
 };
 
+const stringToKeywords = (s) => {
+    return s.toString().replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, " ").trim().split(" ").filter(word => word.length > 1);
+}
+
 module.exports = {
     getData,
-    contains
+    contains,
+    stringToKeywords
 }

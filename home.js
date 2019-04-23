@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
-import { getData, contains } from './api';
-import { StyleSheet, Text, Image, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { getData, contains, stringToKeywords } from './api';
+import { StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import Search from 'react-native-search-box';
 import TabNav from './tabnav';
 
@@ -29,7 +29,6 @@ export default class HomeScreen extends React.Component {
 
     componentDidMount() {
         this.setState( {loading: true} );
-        this.loadData();
         this._isMounted = true;
         this._isMounted && this.loadData();
     }
@@ -49,6 +48,7 @@ export default class HomeScreen extends React.Component {
             })
         })
         .catch((error) => {
+            this.setState( {error, loading: false} );
             console.log('There has been a problem with fetch operation: ' + error.message);
         });
     }
@@ -74,7 +74,7 @@ export default class HomeScreen extends React.Component {
 
     searchLocalyHandler = (searchText = "") => {
         const newData = _.filter(this.state.serverData, article => {
-            return contains(article, searchText)
+            return contains(article, stringToKeywords(searchText))
         });
 
         this.setState({
@@ -95,7 +95,7 @@ export default class HomeScreen extends React.Component {
             })
         } else {
             const newData = _.filter(this.state.serverData, article => {
-                return contains(article, searchText)
+                return contains(article, stringToKeywords(searchText))
             });
 
             this.setState({
@@ -109,15 +109,15 @@ export default class HomeScreen extends React.Component {
         if(item.main_image == null) {
             return (
                 <TouchableOpacity style={styles.Card}
-                    onPress={() => this.props.navigation.navigate('Story', item)}>
+                    onPress={() => this.props.navigation.navigate('Story', item)}>  
 
-                    <ListItem leftAvatar={{ rounded: false, size: "large", source: require('./assets/udk.jpg') }} title={item.headline}/>
+                    <ListItem leftAvatar={{ rounded: false, size: "large", source: require('./assets/udk.jpg') }} title={item.headline} />
                 </TouchableOpacity>
             );
         } else {
             return (
                 <TouchableOpacity style={styles.Card}
-                    onPress={() => this.props.navigation.navigate('Story', item)}>
+                    onPress={() => this.props.navigation.navigate('Story', item)}>  
 
                     <ListItem leftAvatar={{ rounded: false, size: "large", source: { uri: item.main_image } }} title={item.headline}/>
                 </TouchableOpacity>
