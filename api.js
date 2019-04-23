@@ -22,6 +22,8 @@ const getData = async function getData(category = "top", search = "") {
         } else if (category == 'multimedia') {
             response = await axios.get("http://" + IP + ":" + PORT + "/api/multimedia");
         } else if (category == 'specials') {
+            response = await axios.get("http://" + IP + ":" + PORT + "/api/multimedia");
+        } else if (category == 'onthehill') {
             response = await axios.get("http://" + IP + ":" + PORT + "/api/specials");
         } else if (category == 'search') {
 
