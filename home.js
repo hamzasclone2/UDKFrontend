@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { getData, contains, stringToKeywords } from './api';
-import { StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
 import Search from 'react-native-search-box';
 import TabNav from './tabnav';
 
@@ -129,7 +129,7 @@ export default class HomeScreen extends React.Component {
     render() {
         if(this.state.loading) {
             return (
-                <View style={{flex: 1}}>
+                <SafeAreaView style={{flex: 1}}>
                     <View style={{flex: 1.5}}>
                         <ActivityIndicator style={{marginTop: 20}}
                             size="large" color="#0000ff"
@@ -138,11 +138,11 @@ export default class HomeScreen extends React.Component {
                     <View style={styles.Tabs}>
                         <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
                     </View>
-                </View>
+                </SafeAreaView>
             );
         } else {
             return (
-                <View style={{flex: 1}}>
+                <SafeAreaView style={{flex: 1}}>
                     <View style={{flex: 1.5}}>
                         <Search
                             ref="search_box"
@@ -160,7 +160,7 @@ export default class HomeScreen extends React.Component {
                     <View style={styles.Tabs}>
                         <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
                     </View>
-                </View>
+                </SafeAreaView>
             );
         }
 
