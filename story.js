@@ -18,7 +18,7 @@ function DateConverter(date)
 	let updatedDate = writtenMonth+" "+day+", "+year;
 	return updatedDate;
 }
-	
+
 import ArticleBody from './articleBody';
 //A page for a default story
 export default class StoryScreen extends React.Component {
@@ -29,7 +29,7 @@ export default class StoryScreen extends React.Component {
         if(this.data.date.includes("T")){
             this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
         }
-        
+
         this.state = {
             story: state.params,
             parsedBody: [],
@@ -55,7 +55,10 @@ export default class StoryScreen extends React.Component {
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}><Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author}</Text> <Text style = {{fontStyle:'italic'}}>{Dates}</Text></Text>
+                        <Text style={styles.Byline}>
+                            <Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author}</Text>
+                            <Text style = {{fontStyle:'italic'}}>{Dates}</Text>
+                        </Text>
 						<ArticleBody bodyAsText={this.data.body}></ArticleBody>
                     </View>
                 </ScrollView>
@@ -65,13 +68,17 @@ export default class StoryScreen extends React.Component {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
-                       
+
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
-                        <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}><Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author}</Text> <Text style = {{fontStyle:'italic'}}>{Dates}</Text></Text>
-						
-                        <ArticleBody bodyAsText={this.data.body}></ArticleBody>
+                        <View style={{marginLeft:2, marginRight:2}}>
+                            <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
+                            <Text style={styles.Headline}>{this.data.headline}</Text>
+                            <Text style={styles.Byline}>
+                                <Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author + "  "}</Text>
+                                <Text style = {{fontStyle:'italic'}}>{Dates}</Text>
+                            </Text>
+                            <ArticleBody bodyAsText={this.data.body}></ArticleBody>
+                        </View>
                     </View>
                 </ScrollView>
             );
@@ -86,17 +93,13 @@ const styles = StyleSheet.create({
     ArticleWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
-        margin:5,
-        top:-5,
     },
     Headline: {
         fontSize: 30,
 		fontWeight: "bold"
     },
     Byline: {
-		// // textAlign: 'right'
         fontSize: 10,
-		// fontWeight: "bold"
     },
     MainImage: {
         width: 400,
@@ -105,9 +108,5 @@ const styles = StyleSheet.create({
     ImageCaption: {
         fontSize: 10,
         color: '#777777',
-    },
-    Body: {
-        color: '#000000',
-        fontSize: 16,
     },
 });
