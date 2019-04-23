@@ -1,5 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView} from 'react-native';
+function DateConverter(date)
+{
+	let oldDate = date;
+	let writtenMonth;
+	// let updatedOldDate = oldDate.split("-");
+	let [year,month,day] = oldDate.split("-");
+	let monthsNyear = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+	let months = Number(month);
+	for (i=0;i < monthsNyear.length;i++)
+	{
+		if (i==months)
+		{
+			writtenMonth = monthsNyear[i-1];
+		}
+	}
+	let updatedDate = writtenMonth+" "+day+", "+year;
+	return updatedDate;
+}
 
 import ArticleBody from './articleBody';
 //A page for a default story
@@ -11,7 +29,7 @@ export default class StoryScreen extends React.Component {
         if(this.data.date.includes("T")){
             this.data.date = this.data.date.substring(0, this.data.date.indexOf('T'));
         }
-        
+
         this.state = {
             story: state.params,
             parsedBody: [],
@@ -20,13 +38,22 @@ export default class StoryScreen extends React.Component {
 
 
     render(){
-
+		Dates=this.data.date;
+		Dates= DateConverter(Dates);
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <ArticleBody bodyAsText={this.data.body} />
+
+                        <View style={{marginLeft:2, marginRight:2}}>
+                            <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
+                            <Text style={styles.Headline}>{this.data.headline}</Text>
+                            <Text style={styles.Byline}>
+                                <Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author + "  "}</Text>
+                                <Text style = {{fontStyle:'italic'}}>{Dates}</Text>
+                            </Text>
+                            <ArticleBody bodyAsText={this.data.body}></ArticleBody>
+                        </View>
                     </View>
                 </ScrollView>
             );
@@ -35,11 +62,17 @@ export default class StoryScreen extends React.Component {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
+
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
-                        <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
-                        <ArticleBody bodyAsText={this.data.body} />
+                        <View style={{marginLeft:2, marginRight:2}}>
+                            <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
+                            <Text style={styles.Headline}>{this.data.headline}</Text>
+                            <Text style={styles.Byline}>
+                                <Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author + "  "}</Text>
+                                <Text style = {{fontStyle:'italic'}}>{Dates}</Text>
+                            </Text>
+                            <ArticleBody bodyAsText={this.data.body}></ArticleBody>
+                        </View>
                     </View>
                 </ScrollView>
             );
@@ -54,18 +87,13 @@ const styles = StyleSheet.create({
     ArticleWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
-        margin:5,
-        top:-5,
     },
     Headline: {
         fontSize: 30,
 		fontWeight: "bold"
     },
     Byline: {
-        // // textAlign: 'right'
-        color: 'red',
         fontSize: 10,
-		fontWeight: "bold"
     },
     MainImage: {
         width: 400,
@@ -74,9 +102,5 @@ const styles = StyleSheet.create({
     ImageCaption: {
         fontSize: 10,
         color: '#777777',
-    },
-    Body: {
-        color: '#000000',
-        fontSize: 16,
     },
 });

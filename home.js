@@ -10,6 +10,7 @@ import { ListItem } from "react-native-elements";
 export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
+        this._isMounted = false;
         this.tabTouchHandler = this.tabTouchHandler.bind(this)
         this.more = this.more.bind(this)
         this.state = {
@@ -39,25 +40,18 @@ export default class HomeScreen extends React.Component {
     componentWillMount() {
         this.setState( {loading: true} );
         this.loadData();
+        this._isMounted = true;
+        this._isMounted && this.loadData();
     }
 
-    loadData(category = "top", searchText = "") { 
-        const num = 40;
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
 
+    loadData(category = "top", searchText = "") {
         getData(category, searchText)
-        .then((data) => { 
-            let head = null;
-
-            for(story in data) {
-                if(story.main_image != null) {
-                    head = story;
-                    data.filter((elem) => {
-                        return elem != story
-                    });
-                }
-            }
-
-            this.setState({
+        .then((data) => {
+            this._isMounted && this.setState({
                 loading: false,
                 numDisplayed: num,
                 headliner: head,
@@ -66,7 +60,7 @@ export default class HomeScreen extends React.Component {
             })
         })
         .catch((error) => {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
+            console.log('There has been a problem with fetch operation: ' + error.message);
         });
     }
 
@@ -92,39 +86,50 @@ export default class HomeScreen extends React.Component {
     searchLocalHandler = (searchText = "") => {
         const newData = _.filter(this.state.serverData, article => {
             return contains(article, searchText)
-        } );
-           
+        });
+
         this.setState({
             displayedData: newData,
             search: searchText
         });
     }
 
-    searchServerHandler = (searchText = "") => {
-        const newData = _.filter(this.state.serverData, article => {
-            return contains(article, searchText)
-        } );
+    searchOnCancelHandler = (searchText = "") => {
+        this.loadData("top", searchText);
+    }
 
-        this.setState({
-            serverData: newData,
-            search: searchText,
-         } , () => this.loadData("search", searchText)); // to get latest query list/state
+    searchOnServerHandler = (searchText = "") => {
+        if (searchText == "") {
+            this.setState({
+                displayedData: this.state.serverData,
+                search: searchText,
+            })
+        } else {
+            const newData = _.filter(this.state.serverData, article => {
+                return contains(article, searchText)
+            });
+
+            this.setState({
+                displayedData: newData,
+                search: searchText,
+            }, () => this.loadData("search", searchText)); // to get latest query list/state
+        }
     }
 
     renderCard = (item) => {
         if(item.main_image == null) {
             return (
                 <TouchableOpacity style={styles.Card}
-                    onPress={() => this.props.navigation.navigate('Story', item)}>  
-                    
-                    <ListItem title={item.headline}/>
+                    onPress={() => this.props.navigation.navigate('Story', item)}>
+
+                    <ListItem leftAvatar={{ rounded: false, size: "large", source: require('./assets/udk.jpg') }} title={item.headline}/>
                 </TouchableOpacity>
-            );           
+            );
         } else {
             return (
                 <TouchableOpacity style={styles.Card}
-                    onPress={() => this.props.navigation.navigate('Story', item)}>  
-                    
+                    onPress={() => this.props.navigation.navigate('Story', item)}>
+
                     <ListItem leftAvatar={{ rounded: false, size: "large", source: { uri: item.main_image } }} title={item.headline}/>
                 </TouchableOpacity>
             );
@@ -139,12 +144,12 @@ export default class HomeScreen extends React.Component {
                     <View style={{flex: 1.5}}>
                         <ActivityIndicator style={{marginTop: 20}}
                             size="large" color="#0000ff"
-                        />    
-                    </View>  
+                        />
+                    </View>
                     <View style={styles.Tabs}>
                         <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
-                    </View>  
-                </View>     
+                    </View>
+                </View>
             );
         } else {
             return (
@@ -152,9 +157,9 @@ export default class HomeScreen extends React.Component {
                     <View style={{flex: 1.5}}>
                         <Search
                             ref="search_box"
-                            onSearch={text => this.searchServerHandler(text)}
-                            onCancel={text => this.searchServerHandler(text)}
-                            onDelete={text => this.searchLocalHandler(text)}
+                            onSearch={text => this.searchOnServerHandler(text)}
+                            onCancel={() => this.searchOnCancelHandler("")}
+                            onDelete={() => this.searchOnServerHandler("")}
                             onChangeText={text => this.searchLocalyHandler(text)}
                         />
                         <FlatList
@@ -168,7 +173,7 @@ export default class HomeScreen extends React.Component {
                     </View>  
                     <View style={styles.Tabs}>
                         <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
-                    </View>  
+                    </View>
                 </View>
             );
         }
