@@ -38,9 +38,9 @@ export default class HomeScreen extends React.Component {
         this._isMounted = false;
     }
 
-    loadData(category = "top", searchText = "") { 
+    loadData(category = "top", searchText = "") {
         getData(category, searchText)
-        .then((data) => { 
+        .then((data) => {
             this._isMounted && this.setState({
                 loading: false,
                 numDisplayed: 40,
@@ -109,16 +109,16 @@ export default class HomeScreen extends React.Component {
         if(item.main_image == null) {
             return (
                 <TouchableOpacity style={styles.Card}
-                    onPress={() => this.props.navigation.navigate('Story', item)}>  
-                    
-                    <ListItem title={item.headline}/>
+                    onPress={() => this.props.navigation.navigate('Story', item)}>
+
+                    <ListItem leftAvatar={{ rounded: false, size: "large", source: require('./assets/udk.jpg') }} title={item.headline}/>
                 </TouchableOpacity>
-            );           
+            );
         } else {
             return (
                 <TouchableOpacity style={styles.Card}
-                    onPress={() => this.props.navigation.navigate('Story', item)}>  
-                    
+                    onPress={() => this.props.navigation.navigate('Story', item)}>
+
                     <ListItem leftAvatar={{ rounded: false, size: "large", source: { uri: item.main_image } }} title={item.headline}/>
                 </TouchableOpacity>
             );
@@ -133,12 +133,12 @@ export default class HomeScreen extends React.Component {
                     <View style={{flex: 1.5}}>
                         <ActivityIndicator style={{marginTop: 20}}
                             size="large" color="#0000ff"
-                        />    
-                    </View>  
+                        />
+                    </View>
                     <View style={styles.Tabs}>
                         <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
-                    </View>  
-                </View>     
+                    </View>
+                </View>
             );
         } else {
             return (
@@ -155,11 +155,11 @@ export default class HomeScreen extends React.Component {
                             data={this.state.displayedData}
                             renderItem={({item}) => this.renderCard(item)}
                             keyExtractor={(item, index) => (item.id).toString()}
-                        />    
-                    </View>  
+                        />
+                    </View>
                     <View style={styles.Tabs}>
                         <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
-                    </View>  
+                    </View>
                 </View>
             );
         }
