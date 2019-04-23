@@ -12,6 +12,7 @@ export default class HomeScreen extends React.Component {
         super(props);
         this._isMounted = false;
         this.tabTouchHandler = this.tabTouchHandler.bind(this)
+        this.more = this.more.bind(this)
         this.state = {
             loading: true,
             numDisplayed: 40,
@@ -27,7 +28,16 @@ export default class HomeScreen extends React.Component {
         this.searchInput = []
     }
 
-    componentDidMount() {
+    more() {
+        let num = this.state.numDisplayed + 40;
+        let newData = this.state.serverData.slice(0, num)
+        this.setState({
+            numDisplayed: num,
+            displayedData: newData,
+        });
+    }
+
+    componentWillMount() {
         this.setState( {loading: true} );
         this._isMounted = true;
         this._isMounted && this.loadData();
@@ -42,8 +52,9 @@ export default class HomeScreen extends React.Component {
         .then((data) => {
             this._isMounted && this.setState({
                 loading: false,
-                numDisplayed: 40,
-                displayedData: data.slice(0,40),
+                numDisplayed: num,
+                headliner: head,
+                displayedData: data.slice(0, num),
                 serverData: data,
             })
         })
@@ -72,7 +83,7 @@ export default class HomeScreen extends React.Component {
         }
     }
 
-    searchLocalyHandler = (searchText = "") => {
+    searchLocalHandler = (searchText = "") => {
         const newData = _.filter(this.state.serverData, article => {
             return contains(article, stringToKeywords(searchText))
         });
@@ -153,10 +164,13 @@ export default class HomeScreen extends React.Component {
                         />
                         <FlatList
                             data={this.state.displayedData}
-                            renderItem={({item}) => this.renderCard(item)}
+                            renderItem={({item, index}) => this.renderCard(item)}
                             keyExtractor={(item, index) => (item.id).toString()}
-                        />
-                    </View>
+                            ListFooterComponent={ActivityIndicator}
+                            onEndReachedThreshold={0.1}
+                            onEndReached={this.more}
+                        />    
+                    </View>  
                     <View style={styles.Tabs}>
                         <TabNav tabTouchCallback={this.tabTouchHandler}></TabNav>
                     </View>

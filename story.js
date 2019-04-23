@@ -36,16 +36,6 @@ export default class StoryScreen extends React.Component {
         }
     }
 
-    componentWillMount() {
-        this.setState({
-            paragraphs: this.parse(this.data.body),
-        });
-    }
-    parse(text) {
-        let s = text.split("$$$PARAGRAPH$$$");
-        return s;
-
-    }
 
     render(){
 		Dates=this.data.date;
