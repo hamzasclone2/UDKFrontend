@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, SafeAreaView} from 'react-native';
 function DateConverter(date)
 {
 	let oldDate = date;
@@ -52,6 +52,7 @@ export default class StoryScreen extends React.Component {
 		Dates= DateConverter(Dates);
         if(this.data.main_image == null) {
             return (
+                <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
 
@@ -66,10 +67,12 @@ export default class StoryScreen extends React.Component {
                         </View>
                     </View>
                 </ScrollView>
+                </SafeAreaView >
             );
 
         } else {
             return (
+                <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
 
@@ -85,6 +88,7 @@ export default class StoryScreen extends React.Component {
                         </View>
                     </View>
                 </ScrollView>
+                </SafeAreaView>
             );
         }
 
