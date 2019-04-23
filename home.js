@@ -11,6 +11,7 @@ export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.tabTouchHandler = this.tabTouchHandler.bind(this)
+        this.more = this.more.bind(this)
         this.state = {
             loading: true,
             numDisplayed: 40,
@@ -26,18 +27,41 @@ export default class HomeScreen extends React.Component {
         this.searchInput = []
     }
 
-    componentDidMount() {
+    more() {
+        let num = this.state.numDisplayed + 40;
+        let newData = this.state.serverData.slice(0, num)
+        this.setState({
+            numDisplayed: num,
+            displayedData: newData,
+        });
+    }
+
+    componentWillMount() {
         this.setState( {loading: true} );
         this.loadData();
     }
 
     loadData(category = "top", searchText = "") { 
+        const num = 40;
+
         getData(category, searchText)
         .then((data) => { 
+            let head = null;
+
+            for(story in data) {
+                if(story.main_image != null) {
+                    head = story;
+                    data.filter((elem) => {
+                        return elem != story
+                    });
+                }
+            }
+
             this.setState({
                 loading: false,
-                numDisplayed: 40,
-                displayedData: data.slice(0,40),
+                numDisplayed: num,
+                headliner: head,
+                displayedData: data.slice(0, num),
                 serverData: data,
             })
         })
@@ -65,7 +89,7 @@ export default class HomeScreen extends React.Component {
         }
     }
 
-    searchLocalyHandler = (searchText = "") => {
+    searchLocalHandler = (searchText = "") => {
         const newData = _.filter(this.state.serverData, article => {
             return contains(article, searchText)
         } );
@@ -76,7 +100,7 @@ export default class HomeScreen extends React.Component {
         });
     }
 
-    searchOnServerHandler = (searchText = "") => {
+    searchServerHandler = (searchText = "") => {
         const newData = _.filter(this.state.serverData, article => {
             return contains(article, searchText)
         } );
@@ -128,15 +152,18 @@ export default class HomeScreen extends React.Component {
                     <View style={{flex: 1.5}}>
                         <Search
                             ref="search_box"
-                            onSearch={text => this.searchOnServerHandler(text)}
-                            onCancel={text => this.searchOnServerHandler(text)}
-                            onDelete={text => this.searchLocalyHandler(text)}
+                            onSearch={text => this.searchServerHandler(text)}
+                            onCancel={text => this.searchServerHandler(text)}
+                            onDelete={text => this.searchLocalHandler(text)}
                             onChangeText={text => this.searchLocalyHandler(text)}
                         />
                         <FlatList
                             data={this.state.displayedData}
-                            renderItem={({item}) => this.renderCard(item)}
+                            renderItem={({item, index}) => this.renderCard(item)}
                             keyExtractor={(item, index) => (item.id).toString()}
+                            ListFooterComponent={ActivityIndicator}
+                            onEndReachedThreshold={0.1}
+                            onEndReached={this.more}
                         />    
                     </View>  
                     <View style={styles.Tabs}>

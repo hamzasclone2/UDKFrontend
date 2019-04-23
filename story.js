@@ -18,29 +18,15 @@ export default class StoryScreen extends React.Component {
         }
     }
 
-    componentWillMount() {
-        this.setState({
-            paragraphs: this.parse(this.data.body),
-        });
-    }
-    parse(text) {
-        let s = text.split("$$$PARAGRAPH$$$");
-        return s;
-
-    }
 
     render(){
-        const paragraphsJSX = this.state.paragraphs.map((paragraph, i) =>
-            <Text key={i} style={styles.Body}>{'\t\t'}{paragraph}{'\n'}</Text>
-        );
 
         if(this.data.main_image == null) {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
                         <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
-                        {paragraphsJSX}
+                        <ArticleBody bodyAsText={this.data.body} />
                     </View>
                 </ScrollView>
             );
@@ -49,10 +35,11 @@ export default class StoryScreen extends React.Component {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
                         <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
-                        {paragraphsJSX}
+                        <Text style={styles.Headline}>{this.data.headline}</Text>
+                        <Text style={styles.Byline}>{this.data.author} | {this.data.date}</Text>
+                        <ArticleBody bodyAsText={this.data.body} />
                     </View>
                 </ScrollView>
             );
@@ -75,7 +62,8 @@ const styles = StyleSheet.create({
 		fontWeight: "bold"
     },
     Byline: {
-		// // textAlign: 'right'
+        // // textAlign: 'right'
+        color: 'red',
         fontSize: 10,
 		fontWeight: "bold"
     },
