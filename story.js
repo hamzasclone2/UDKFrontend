@@ -54,12 +54,16 @@ export default class StoryScreen extends React.Component {
             return (
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
-                        <Text style={styles.Headline}>{this.data.headline}</Text>
-                        <Text style={styles.Byline}>
-                            <Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author}</Text>
-                            <Text style = {{fontStyle:'italic'}}>{Dates}</Text>
-                        </Text>
-						<ArticleBody bodyAsText={this.data.body}></ArticleBody>
+
+                        <View style={{marginLeft:2, marginRight:2}}>
+                            <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
+                            <Text style={styles.Headline}>{this.data.headline}</Text>
+                            <Text style={styles.Byline}>
+                                <Text style ={{color: 'red',fontWeight: 'bold'}}>{this.data.author + "  "}</Text>
+                                <Text style = {{fontStyle:'italic'}}>{Dates}</Text>
+                            </Text>
+                            <ArticleBody bodyAsText={this.data.body}></ArticleBody>
+                        </View>
                     </View>
                 </ScrollView>
             );
