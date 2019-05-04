@@ -10,30 +10,25 @@ export default class ArticleBody extends React.Component {
 
     render() {
         return (
-            <Text style= {{fontSize:20}}>{this.bodyList}</Text>
+            <Text style= {{fontSize:16}}>{this.bodyList}</Text>
         );
     }
 
     parse(bodyasText) {
 		var mystring = this.props.bodyAsText;
 		var x;
+        var first = true;
 		for(x = 0; x < mystring.length; x++)
 		{
-			mystring = mystring.replace("$$$PARAGRAPH$$$", "\n\n");
+            if(first){
+                mystring = mystring.replace("$$$PARAGRAPH$$$", "\n");
+                first = false;
+            }else{
+                mystring = mystring.replace("$$$PARAGRAPH$$$", "\n\n");
+            }
+
 		}
 		return <Text> {mystring}</Text>
-        // return [];
     }
 
 }
-
-const styles = StyleSheet.create({
-    BodyWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin:5,
-    },
-    Body: {
-        fontSize: 12,
-    },
-});

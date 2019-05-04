@@ -56,7 +56,7 @@ export default class StoryScreen extends React.Component {
                 <ScrollView style={{backgroundColor: '#ffffff'}}>
                     <View style={styles.ArticleWrapper}>
 
-                        <View style={{marginLeft:2, marginRight:2}}>
+                        <View style={{marginLeft:10, marginRight:10}}>
                             <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
                             <Text style={styles.Headline}>{this.data.headline}</Text>
                             <Text style={styles.Byline}>
@@ -77,7 +77,7 @@ export default class StoryScreen extends React.Component {
                     <View style={styles.ArticleWrapper}>
 
                         <Image style={styles.MainImage} resizeMode={'cover'} source={{uri: this.data.main_image}} />
-                        <View style={{marginLeft:2, marginRight:2}}>
+                        <View style={{marginLeft:10, marginRight:10}}>
                             <Text style={styles.ImageCaption}>{this.data.main_image_byline}</Text>
                             <Text style={styles.Headline}>{this.data.headline}</Text>
                             <Text style={styles.Byline}>
@@ -103,11 +103,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     Headline: {
+		marginTop: 10,
         fontSize: 30,
-		fontWeight: "bold"
+		fontWeight: "bold",
     },
     Byline: {
-        fontSize: 10,
+		marginTop: 10,
+        fontSize: 12,
     },
     MainImage: {
         width: 400,
