@@ -9,3 +9,6 @@ Also make sure that you do the following command inside the project folder befor
 npm install --save react-navigation
 ```   
 After you've done that, open the expo project and run it on either ios directly or on android after opening the android studio simulator.  
+
+The app is reading atricles form API server. The server's IP address and port configuration are in api.js file (in case of server change, the configuration needs to be changed)   
+
