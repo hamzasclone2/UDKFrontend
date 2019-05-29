@@ -1,6 +1,12 @@
 # UDKFrontend
 Frontend for UDK Senior Design Project
 
+Home Screen:  
+![Home Screen](/udk-images/udkscreen1.png)
+
+Article Screen:  
+![Article Screen](/udk-images/udkscreen2.png)
+
 The easiest way to run this is with expo. Follow these instructions here if you haven't already:  
 https://facebook.github.io/react-native/docs/getting-started    
 This github project doesn't have everything that would be in a normal expo project so replace your local App.js with this one and get any extra files from the assets folder as needed.  
