@@ -1,1 +1,1 @@
-*.* linguist-language=Javascript
+*.java linguist-detectable=false
