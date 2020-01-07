@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const PORT = '3001';
-const IP = '104.248.235.9'; 
-
+const IP = '129.237.87.50';
+//const IP = '104.248.235.9'; - DigitalOcean
 const getData = async function getData(category = "top", search = "") {
     let response;
     let articles;
